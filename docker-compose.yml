@@ -1,0 +1,36 @@
+# Set docker compose file configuration version
+version: "3.8"
+
+# Define the services/containers to be run
+services:
+  # Define the container key
+  item-db:
+    # Define the docker image
+    image: mongo:3
+    # Define the container name
+    container_name: item-db
+    # Always restart the container if it stops
+    restart: always
+    # Set volumes source and destination
+    volumes:
+      - app-db:/data/db
+
+  # Define the container key
+  item-app:
+    # Define the docker image
+    image: ghcr.io/NAMESPACE/item-app:v1
+    # Define the container name
+    container_name: item-app
+    # Always restart the container if it stops
+    restart: always
+    # Set port mapping
+    ports:
+      - "80:8080"
+    # Run this container after other containers have started
+    depends_on:
+      - item-db
+
+# Define the volumes
+volumes:
+  # Define the volume name
+  app-db:
